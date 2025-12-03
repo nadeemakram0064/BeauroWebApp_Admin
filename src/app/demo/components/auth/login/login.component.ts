@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
@@ -27,7 +28,35 @@ export class LoginComponent {
 
     valCheck: string[] = ['remember'];
 
+    email!: string;
     password!: string;
+    rememberMe: boolean = false;
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        public layoutService: LayoutService,
+        private router: Router
+    ) { }
+
+    onLogin() {
+        const loginData = {
+            email: this.email,
+            password: this.password,
+            rememberMe: this.rememberMe
+        };
+        
+        console.log('Login data:', loginData);
+        // TODO: Implement your login logic here
+        // For example: this.authService.login(loginData).subscribe(
+        //     (response) => {
+        //         // On successful login
+        //         this.router.navigate(['/mydashboard']);
+        //     },
+        //     (error) => {
+        //         // Handle error
+        //     }
+        // );
+        
+        // For now, navigate directly (remove this when implementing actual auth service)
+        this.router.navigate(['/mydashboard']);
+    }
 }
