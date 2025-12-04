@@ -11,17 +11,15 @@ import { MydashboardComponent } from './demo/components/mydashboard/mydashboard.
                 path: '', component: AppLayoutComponent,
                 children: [
                     { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
-                    { path: 'uikit', loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UikitModule) },
-                    { path: 'utilities', loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
-                    { path: 'documentation', loadChildren: () => import('./demo/components/documentation/documentation.module').then(m => m.DocumentationModule) },
-                    { path: 'blocks', loadChildren: () => import('./demo/components/primeblocks/primeblocks.module').then(m => m.PrimeBlocksModule) },
-                    { path: 'pages', loadChildren: () => import('./demo/components/pages/pages.module').then(m => m.PagesModule) },
-                    // New Update Template
                     { path: 'mydashboard', component: MydashboardComponent },
+                    { path: 'requestqueue', loadChildren: () => import('./demo/components/requestqueue/requestqueue.module').then(m => m.RequestqueueModule) },
+                    { path: 'profiles/beauro', loadChildren: () => import('./demo/components/beauroprofiles/beauroprofiles.module').then(m => m.BeauroprofilesModule) },
+                    { path: 'profiles/individual', loadChildren: () => import('./demo/components/individualprofiles/individualprofiles.module').then(m => m.IndividualprofilesModule) },
+                    { path: 'setup/globalsettings', loadChildren: () => import('./demo/components/setup/globalsettings/globalsettings.module').then(m => m.GlobalsettingsModule) },
+                    { path: 'setup/workflow', loadChildren: () => import('./demo/components/setup/workflow/workflow.module').then(m => m.WorkflowModule) },
                 ],
             },
             { path: 'auth', loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
-            { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
             { path: 'pages/notfound', component: NotfoundComponent },
             { path: '**', redirectTo: 'pages/notfound' },
         ], { scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled', onSameUrlNavigation: 'reload' })
