@@ -12,3 +12,4 @@ import { IndividualprofilesComponent } from './individualprofiles.component';
 })
 export class IndividualprofilesModule { }
 
+

@@ -10,3 +10,4 @@ import { IndividualprofilesComponent } from './individualprofiles.component';
 })
 export class IndividualprofilesRoutingModule { }
 
+

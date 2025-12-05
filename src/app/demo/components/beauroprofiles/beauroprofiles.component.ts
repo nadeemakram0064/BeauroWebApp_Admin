@@ -14,3 +14,4 @@ export class BeauroprofilesComponent implements OnInit {
 
 }
 
+

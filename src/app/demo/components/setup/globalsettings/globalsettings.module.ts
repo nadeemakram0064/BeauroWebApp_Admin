@@ -12,3 +12,4 @@ import { GlobalsettingsComponent } from './globalsettings.component';
 })
 export class GlobalsettingsModule { }
 
+

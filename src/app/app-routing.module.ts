@@ -12,7 +12,9 @@ import { MydashboardComponent } from './demo/components/mydashboard/mydashboard.
                 children: [
                     { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
                     { path: 'mydashboard', component: MydashboardComponent },
-                    { path: 'requestqueue', loadChildren: () => import('./demo/components/requestqueue/requestqueue.module').then(m => m.RequestqueueModule) },
+                    { path: 'requestqueue', loadChildren: () => import('./demo/components/Queue/requestqueue/requestqueue.module').then(m => m.RequestqueueModule) },
+                    { path: 'requestqueuedetails-beauro', loadChildren: () => import('./demo/components/Queue/requestqueuedetails-beauro/requestqueuedetails-beauro.module').then(m => m.RequestqueuedetailsBeauroModule) },
+                    { path: 'requestqueuedetails-individual', loadChildren: () => import('./demo/components/Queue/requestqueuedetails-individual/requestqueuedetails-individual.module').then(m => m.RequestqueuedetailsIndividualModule) },
                     { path: 'profiles/beauro', loadChildren: () => import('./demo/components/beauroprofiles/beauroprofiles.module').then(m => m.BeauroprofilesModule) },
                     { path: 'profiles/individual', loadChildren: () => import('./demo/components/individualprofiles/individualprofiles.module').then(m => m.IndividualprofilesModule) },
                     { path: 'setup/globalsettings', loadChildren: () => import('./demo/components/setup/globalsettings/globalsettings.module').then(m => m.GlobalsettingsModule) },

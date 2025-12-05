@@ -14,3 +14,4 @@ export class GlobalsettingsComponent implements OnInit {
 
 }
 
+

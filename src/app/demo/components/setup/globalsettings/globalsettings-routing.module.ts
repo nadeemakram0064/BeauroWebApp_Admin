@@ -10,3 +10,4 @@ import { GlobalsettingsComponent } from './globalsettings.component';
 })
 export class GlobalsettingsRoutingModule { }
 
+

@@ -10,3 +10,4 @@ import { BeauroprofilesComponent } from './beauroprofiles.component';
 })
 export class BeauroprofilesRoutingModule { }
 
+

@@ -1,0 +1,280 @@
+/* Request Queue Details Individual component styles */
+
+// Gradient backgrounds
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+// Status badges
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    &.status-verified {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #b8daff;
+    }
+
+    &.status-active {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+}
+
+.badge-verified {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    border: none;
+}
+
+// Document cards
+.document-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-color: #fce4ec !important;
+
+    &:hover {
+        transform: translateY(-3px);
+        border-color: #f8bbd9 !important;
+    }
+
+    .document-icon {
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fce4ec !important;
+    }
+}
+
+// Tab styling
+.tabview-beautiful {
+    ::ng-deep {
+        .p-tabview-panels {
+            padding: 0;
+        }
+
+        .p-tabview-nav {
+            background: #fef7f9;
+            border-bottom: 2px solid #fce4ec;
+
+            li {
+                margin-right: 0;
+
+                .p-tabview-nav-link {
+                    border: none;
+                    border-radius: 8px 8px 0 0;
+                    padding: 1rem 1.5rem;
+                    font-weight: 600;
+                    color: #ad1457;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: #fce4ec;
+                        color: #c2185b;
+                    }
+
+                    &.p-highlight {
+                        background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+                        color: white;
+                        box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
+                    }
+                }
+            }
+        }
+
+        .p-tabview-panel {
+            padding: 2rem;
+            background: #ffffff;
+            border: 1px solid #fce4ec;
+            border-top: none;
+        }
+    }
+}
+
+// Spacing utilities
+.space-y-3 > * + * {
+    margin-top: 0.75rem;
+}
+
+// Chat styling
+.chat-container {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+
+    .chat-messages {
+        padding: 1rem;
+
+        .message {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: flex-end;
+
+            &.sent {
+                justify-content: flex-end;
+
+                .message-content {
+                    margin-right: 0.5rem;
+                    margin-left: 3rem;
+
+                    .message-text {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border-radius: 18px 18px 4px 18px;
+                    }
+                }
+
+                .message-avatar {
+                    order: 2;
+                }
+            }
+
+            &.received {
+                justify-content: flex-start;
+
+                .message-content {
+                    margin-left: 0.5rem;
+                    margin-right: 3rem;
+
+                    .message-text {
+                        background: white;
+                        color: #495057;
+                        border-radius: 18px 18px 18px 4px;
+                        border: 1px solid #e9ecef;
+                    }
+                }
+
+                .message-avatar {
+                    order: -1;
+                }
+            }
+
+            .message-content {
+                max-width: 70%;
+
+                .message-text {
+                    padding: 0.75rem 1rem;
+                    word-wrap: break-word;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .message-time {
+                    font-size: 0.75rem;
+                    color: #6c757d;
+                    margin-top: 0.25rem;
+                    text-align: right;
+                }
+            }
+
+            .message-avatar {
+                .avatar-circle {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+                    &.admin-avatar {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                    }
+
+                    &.individual-avatar {
+                        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.chat-input {
+    .p-inputgroup {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 25px;
+        overflow: hidden;
+
+        input {
+            border: none;
+            border-radius: 0;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+
+        .p-button {
+            border: none;
+            border-radius: 0;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            }
+
+            &:disabled {
+                background: #e9ecef;
+                color: #6c757d;
+            }
+        }
+    }
+}
+
+// Responsive improvements
+@media screen and (max-width: 768px) {
+    .bg-gradient-primary {
+        .flex {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .p-button-lg {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .tabview-beautiful ::ng-deep .p-tabview-nav li .p-tabview-nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .chat-container {
+        height: 400px !important;
+
+        .message {
+            .message-content {
+                max-width: 85%;
+
+                &.sent .message-content {
+                    margin-left: 2rem;
+                }
+
+                &.received .message-content {
+                    margin-right: 2rem;
+                }
+            }
+        }
+    }
+}

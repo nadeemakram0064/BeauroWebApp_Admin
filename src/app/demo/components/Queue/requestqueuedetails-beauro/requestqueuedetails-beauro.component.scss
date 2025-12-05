@@ -1,0 +1,1287 @@
+/* Request Queue Details component styles */
+
+// Gradient backgrounds
+.bg-gradient-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.bg-gradient-marriage {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 50%, #fce4ec 100%);
+}
+
+.bg-gradient-services {
+    background: linear-gradient(135deg, #fce4ec 0%, #f8bbd9 100%);
+}
+
+.bg-gradient-rating {
+    background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+}
+
+// Status badges
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+
+    &.status-pending {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    &.status-verified {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #b8daff;
+    }
+
+    &.status-active {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    &.status-processing {
+        background-color: #e2e3e5;
+        color: #383d41;
+        border: 1px solid #d6d8db;
+    }
+}
+
+.badge-verified {
+    background: linear-gradient(45deg, #28a745, #20c997);
+    color: white;
+    border: none;
+}
+
+// Services Offered Tab Styling
+.services-overview {
+    text-align: center;
+    padding: 2rem 0;
+
+    h4 {
+        color: #374151;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    p {
+        color: #6b7280;
+        font-size: 1.1rem;
+    }
+}
+
+.service-section {
+    background: #f9fafb;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border: 1px solid #e5e7eb;
+
+    .section-header {
+        .service-icon-wrapper {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+
+            .service-main-icon {
+                color: white;
+                font-size: 1.5rem;
+            }
+        }
+
+        h5 {
+            color: #111827;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+    }
+}
+
+// Marriage Service Cards
+.marriage-service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+    }
+
+    .service-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+            .service-card-icon {
+                color: white;
+                font-size: 1.5rem;
+            }
+        }
+
+        .service-status {
+            .service-provided-icon {
+                color: #10b981;
+                font-size: 1.5rem;
+            }
+
+            .service-selected-icon {
+                color: #3b82f6;
+                font-size: 1.5rem;
+            }
+        }
+    }
+
+    .service-card-content {
+        .service-title-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+
+            .service-title {
+                color: #111827;
+                font-weight: 600;
+                font-size: 1.1rem;
+                margin: 0;
+            }
+
+            .service-badge {
+                background: #10b981;
+                color: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 12px;
+                font-size: 0.7rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+        }
+
+        .service-description {
+            color: #6b7280;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+
+        .service-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+
+            .feature-badge {
+                background: #f3f4f6;
+                color: #374151;
+                padding: 0.25rem 0.75rem;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 500;
+            }
+        }
+    }
+
+    .service-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+
+        .service-price {
+            color: #059669;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .service-duration {
+            color: #6b7280;
+            font-size: 0.85rem;
+        }
+    }
+}
+
+// Additional Service Cards
+.additional-service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+    overflow: hidden;
+
+    &:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        border-color: #8b5cf6;
+    }
+
+    &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #8b5cf6, #a855f7);
+    }
+
+    .service-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+            .service-card-icon {
+                color: white;
+                font-size: 1.25rem;
+            }
+        }
+
+        .service-status {
+            .service-provided-icon {
+                color: #10b981;
+                font-size: 1.25rem;
+            }
+
+            .service-selected-icon {
+                color: #3b82f6;
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    .service-card-content {
+        .service-title-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.5rem;
+
+            .service-title {
+                color: #111827;
+                font-weight: 600;
+                font-size: 1rem;
+                margin: 0;
+            }
+
+            .service-badge {
+                background: #10b981;
+                color: white;
+                padding: 0.25rem 0.5rem;
+                border-radius: 12px;
+                font-size: 0.7rem;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+            }
+        }
+
+        .service-description {
+            color: #6b7280;
+            font-size: 0.85rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .service-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+
+            .service-stars {
+                ::ng-deep .p-rating {
+                    font-size: 0.85rem;
+                }
+            }
+
+            .rating-text {
+                color: #6b7280;
+                font-size: 0.8rem;
+            }
+        }
+    }
+
+    .service-card-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 1rem;
+        border-top: 1px solid #e5e7eb;
+
+        .service-price {
+            color: #059669;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .p-button {
+            padding: 0.5rem 1rem;
+            font-size: 0.8rem;
+        }
+    }
+}
+
+// Service Summary
+.service-summary {
+    .summary-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 16px;
+        padding: 2rem;
+        color: white;
+
+        .summary-item {
+            text-align: center;
+            padding: 1rem;
+
+            .summary-icon {
+                width: 60px;
+                height: 60px;
+                background: rgba(255, 255, 255, 0.2);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin: 0 auto 1rem auto;
+                font-size: 1.5rem;
+            }
+
+            .summary-content {
+                .summary-title {
+                    font-size: 0.9rem;
+                    margin-bottom: 0.5rem;
+                    opacity: 0.9;
+                }
+
+                .summary-value {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+// Responsive improvements for services
+@media screen and (max-width: 768px) {
+    .service-section {
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .marriage-service-card,
+    .additional-service-card {
+        padding: 1.25rem;
+
+        .service-card-header {
+            .service-icon {
+                width: 50px;
+                height: 50px;
+
+                .service-card-icon {
+                    font-size: 1.25rem;
+                }
+            }
+        }
+
+        .service-card-content {
+            .service-title {
+                font-size: 1rem;
+            }
+
+            .service-description {
+                font-size: 0.85rem;
+            }
+        }
+    }
+
+    .service-summary .summary-card {
+        padding: 1.5rem;
+
+        .summary-item {
+            padding: 0.75rem;
+
+            .summary-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.25rem;
+            }
+
+            .summary-value {
+                font-size: 1.5rem;
+            }
+        }
+    }
+}
+
+// Document cards
+.document-card {
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-color: #fce4ec !important;
+
+    &:hover {
+        transform: translateY(-3px);
+        border-color: #f8bbd9 !important;
+    }
+
+    .document-icon {
+        border-radius: 8px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fce4ec !important;
+    }
+}
+
+// Rating overview
+.rating-overview {
+    position: relative;
+    overflow: hidden;
+
+    .rating-circle {
+        border: 4px solid rgba(255, 255, 255, 0.3);
+    }
+}
+
+// Reviews section
+.reviews-section {
+    .review-card {
+        transition: all 0.3s ease;
+        border-left: 4px solid #e9ecef;
+
+        &:hover {
+            border-left-color: #007bff;
+            background-color: #f8f9fa;
+        }
+
+        .avatar-circle {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+
+        .review-badge {
+            font-size: 0.7rem;
+        }
+    }
+}
+
+// Timeline styling
+.timeline-container {
+    background-color: #fef7f9;
+    border: 1px solid #fce4ec;
+    border-radius: 12px;
+
+    .timeline-marker {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.2rem;
+        box-shadow: 0 4px 12px rgba(233, 30, 99, 0.3);
+        border: 3px solid rgba(255, 255, 255, 0.5);
+
+        &.bg-blue-500 {
+            background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+        }
+
+        &.bg-orange-500 {
+            background: linear-gradient(135deg, #ec407a 0%, #f48fb1 100%);
+        }
+
+        &.bg-purple-500 {
+            background: linear-gradient(135deg, #d81b60 0%, #e91e63 100%);
+        }
+
+        &.bg-green-500 {
+            background: linear-gradient(135deg, #c2185b 0%, #e91e63 100%);
+        }
+    }
+
+    .timeline-content {
+        max-width: 400px;
+    }
+
+    .timeline-date {
+        font-size: 0.8rem;
+        white-space: nowrap;
+        background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 0.5rem 1rem;
+    }
+}
+
+.custom-timeline {
+    ::ng-deep {
+        .p-timeline-event-opposite {
+            text-align: center;
+        }
+
+        .p-timeline-event-content {
+            margin-bottom: 2rem;
+        }
+    }
+}
+
+// Tab styling
+.tabview-beautiful {
+    ::ng-deep {
+        .p-tabview-panels {
+            padding: 0;
+        }
+
+        .p-tabview-nav {
+            background: #fef7f9;
+            border-bottom: 2px solid #fce4ec;
+
+            li {
+                margin-right: 0;
+
+                .p-tabview-nav-link {
+                    border: none;
+                    border-radius: 8px 8px 0 0;
+                    padding: 1rem 1.5rem;
+                    font-weight: 600;
+                    color: #ad1457;
+                    transition: all 0.3s ease;
+
+                    &:hover {
+                        background: #fce4ec;
+                        color: #c2185b;
+                    }
+
+                    &.p-highlight {
+                        background: linear-gradient(135deg, #e91e63 0%, #f06292 100%);
+                        color: white;
+                        box-shadow: 0 2px 8px rgba(233, 30, 99, 0.3);
+                    }
+                }
+            }
+        }
+
+        .p-tabview-panel {
+            padding: 2rem;
+            background: #ffffff;
+            border: 1px solid #fce4ec;
+            border-top: none;
+        }
+    }
+}
+
+// Spacing utilities
+.space-y-3 > * + * {
+    margin-top: 0.75rem;
+}
+
+// Chat styling
+.chat-container {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+
+    .chat-messages {
+        padding: 1rem;
+
+        .message {
+            display: flex;
+            margin-bottom: 1rem;
+            align-items: flex-end;
+
+            &.sent {
+                justify-content: flex-end;
+
+                .message-content {
+                    margin-right: 0.5rem;
+                    margin-left: 3rem;
+
+                    .message-text {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border-radius: 18px 18px 4px 18px;
+                    }
+                }
+
+                .message-avatar {
+                    order: 2;
+                }
+            }
+
+            &.received {
+                justify-content: flex-start;
+
+                .message-content {
+                    margin-left: 0.5rem;
+                    margin-right: 3rem;
+
+                    .message-text {
+                        background: white;
+                        color: #495057;
+                        border-radius: 18px 18px 18px 4px;
+                        border: 1px solid #e9ecef;
+                    }
+                }
+
+                .message-avatar {
+                    order: -1;
+                }
+            }
+
+            .message-content {
+                max-width: 70%;
+
+                .message-text {
+                    padding: 0.75rem 1rem;
+                    word-wrap: break-word;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                }
+
+                .message-time {
+                    font-size: 0.75rem;
+                    color: #6c757d;
+                    margin-top: 0.25rem;
+                    text-align: right;
+                }
+            }
+
+            .message-avatar {
+                .avatar-circle {
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-weight: bold;
+                    font-size: 0.9rem;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+                    &.admin-avatar {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                    }
+
+                    &.bureau-avatar {
+                        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                        color: white;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.chat-input {
+    .p-inputgroup {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 25px;
+        overflow: hidden;
+
+        input {
+            border: none;
+            border-radius: 0;
+            padding: 0.75rem 1rem;
+            font-size: 0.9rem;
+
+            &:focus {
+                box-shadow: none;
+            }
+        }
+
+        .p-button {
+            border: none;
+            border-radius: 0;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+            &:hover {
+                background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+            }
+
+            &:disabled {
+                background: #e9ecef;
+                color: #6c757d;
+            }
+        }
+    }
+}
+
+// Reviews & Ratings Tab Styling
+.rating-overview-section {
+    .rating-header {
+        text-align: center;
+        padding: 2rem 0;
+
+        h4 {
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.overall-rating-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    color: white;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+
+    .rating-display {
+        .rating-number {
+            margin-bottom: 1rem;
+
+            .rating-value {
+                font-size: 3.5rem;
+                font-weight: 700;
+                display: block;
+                line-height: 1;
+            }
+
+            .rating-max {
+                font-size: 1.2rem;
+                opacity: 0.8;
+            }
+        }
+
+        .rating-stars {
+            margin-bottom: 1rem;
+
+            ::ng-deep .p-rating {
+                .p-rating-item {
+                    color: #fbbf24 !important;
+                    font-size: 1.5rem;
+                }
+            }
+        }
+
+        .rating-text {
+            .rating-label {
+                display: block;
+                font-size: 1.25rem;
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
+
+            .rating-count {
+                font-size: 0.95rem;
+                opacity: 0.9;
+            }
+        }
+    }
+}
+
+.rating-breakdown {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+    .breakdown-title {
+        color: #374151;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+    }
+
+    .rating-bars {
+        .rating-bar-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 1rem;
+
+            .rating-bar-label {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+                min-width: 80px;
+
+                .stars-count {
+                    font-weight: 600;
+                    color: #374151;
+                    font-size: 0.9rem;
+                }
+
+                .percentage {
+                    color: #6b7280;
+                    font-size: 0.85rem;
+                    min-width: 35px;
+                }
+            }
+
+            .rating-bar-container {
+                flex: 1;
+                height: 8px;
+                background: #f3f4f6;
+                border-radius: 4px;
+                overflow: hidden;
+
+                .rating-bar-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, #fbbf24, #f59e0b);
+                    border-radius: 4px;
+                    transition: width 0.3s ease;
+                }
+            }
+
+            .rating-count {
+                color: #6b7280;
+                font-size: 0.8rem;
+                min-width: 40px;
+                text-align: right;
+            }
+        }
+    }
+}
+
+.reviews-section {
+    .reviews-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+
+        .reviews-title {
+            color: #374151;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .reviews-filter {
+            .filter-dropdown {
+                min-width: 180px;
+
+                ::ng-deep .p-dropdown {
+                    border-radius: 8px;
+                    border: 1px solid #d1d5db;
+
+                    .p-dropdown-label {
+                        padding: 0.5rem 0.75rem;
+                        font-size: 0.9rem;
+                    }
+                }
+            }
+        }
+    }
+
+    .reviews-grid {
+        display: grid;
+        gap: 1.5rem;
+    }
+}
+
+.review-card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f3f4f6;
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+    }
+
+    .review-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+
+        .reviewer-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+
+            .reviewer-avatar {
+                .avatar-circle {
+                    width: 50px;
+                    height: 50px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #667eea, #764ba2);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: 600;
+                    font-size: 1rem;
+                }
+            }
+
+            .reviewer-details {
+                .reviewer-name {
+                    color: #374151;
+                    font-weight: 600;
+                    margin: 0 0 0.25rem 0;
+                    font-size: 1rem;
+                }
+
+                .review-meta {
+                    display: flex;
+                    align-items: center;
+                    gap: 0.75rem;
+
+                    .review-stars {
+                        ::ng-deep .p-rating {
+                            .p-rating-item {
+                                color: #fbbf24 !important;
+                                font-size: 0.9rem;
+                            }
+                        }
+                    }
+
+                    .review-date {
+                        color: #6b7280;
+                        font-size: 0.85rem;
+                    }
+                }
+            }
+        }
+
+        .review-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+
+            .verified-badge,
+            .helpful-badge {
+                display: flex;
+                align-items: center;
+                gap: 0.25rem;
+                padding: 0.25rem 0.5rem;
+                border-radius: 12px;
+                font-size: 0.75rem;
+                font-weight: 500;
+
+                i {
+                    font-size: 0.7rem;
+                }
+            }
+
+            .verified-badge {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            .helpful-badge {
+                background: #e0f2fe;
+                color: #0c4a6e;
+            }
+        }
+    }
+
+    .review-content {
+        margin-bottom: 1rem;
+
+        .review-text {
+            color: #374151;
+            line-height: 1.6;
+            margin: 0 0 0.75rem 0;
+            font-size: 0.95rem;
+        }
+
+        .review-service {
+            .service-tag {
+                background: #f3f4f6;
+                color: #374151;
+                padding: 0.25rem 0.75rem;
+                border-radius: 20px;
+                font-size: 0.8rem;
+                font-weight: 500;
+                display: inline-block;
+            }
+        }
+    }
+
+    .review-actions {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1rem;
+
+        .action-btn {
+            background: none;
+            border: none;
+            color: #6b7280;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+
+            i {
+                font-size: 0.8rem;
+            }
+
+            &:hover {
+                background: #f3f4f6;
+                color: #374151;
+            }
+
+            &.helpful-btn:hover {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            &.reply-btn:hover {
+                background: #e0f2fe;
+                color: #0c4a6e;
+            }
+        }
+    }
+
+    .bureau-reply {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 1rem;
+        border-left: 4px solid #667eea;
+
+        .reply-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+
+            .bureau-avatar {
+                .avatar-circle.bureau {
+                    background: linear-gradient(135deg, #10b981, #059669);
+                    width: 36px;
+                    height: 36px;
+                    font-size: 0.9rem;
+                }
+            }
+
+            .reply-info {
+                .bureau-name {
+                    color: #374151;
+                    font-weight: 600;
+                    font-size: 0.9rem;
+                    margin: 0 0 0.125rem 0;
+                }
+
+                .reply-date {
+                    color: #6b7280;
+                    font-size: 0.8rem;
+                }
+            }
+        }
+
+        .reply-text {
+            color: #374151;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+    }
+}
+
+.load-more-section {
+    text-align: center;
+    margin-top: 2rem;
+
+    .load-more-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 25px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+
+        &:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+    }
+}
+
+// Responsive improvements for reviews
+@media screen and (max-width: 768px) {
+    .bg-gradient-primary {
+        .flex {
+            flex-direction: column;
+            align-items: stretch !important;
+        }
+
+        .p-button-lg {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .service-card {
+        margin-bottom: 1rem;
+    }
+
+    .tabview-beautiful ::ng-deep .p-tabview-nav li .p-tabview-nav-link {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .chat-container {
+        height: 400px !important;
+
+        .message {
+            .message-content {
+                max-width: 85%;
+
+                &.sent .message-content {
+                    margin-left: 2rem;
+                }
+
+                &.received .message-content {
+                    margin-right: 2rem;
+                }
+            }
+        }
+    }
+
+    .rating-overview-section {
+        .rating-header {
+            padding: 1rem 0;
+
+            h4 {
+                font-size: 1.25rem;
+            }
+        }
+    }
+
+    .overall-rating-card {
+        padding: 1.5rem;
+
+        .rating-display {
+            .rating-number .rating-value {
+                font-size: 2.5rem;
+            }
+        }
+    }
+
+    .reviews-header {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: flex-start !important;
+
+        .reviews-filter {
+            width: 100%;
+
+            .filter-dropdown {
+                width: 100%;
+            }
+        }
+    }
+
+    .review-card {
+        .review-header {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start !important;
+
+            .review-badges {
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+        }
+
+        .review-actions {
+            flex-wrap: wrap;
+
+            .action-btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+        }
+    }
+
+    .rating-breakdown {
+        padding: 1.5rem;
+
+        .rating-bar-item {
+            flex-direction: column;
+            align-items: flex-start !important;
+            gap: 0.5rem;
+
+            .rating-bar-label {
+                min-width: auto;
+                justify-content: space-between;
+                width: 100%;
+            }
+
+            .rating-bar-container {
+                width: 100%;
+                height: 10px;
+            }
+        }
+    }
+}
