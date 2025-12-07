@@ -9,3 +9,4 @@ import { RequestqueuedetailsIndividualComponent } from './requestqueuedetails-in
     exports: [RouterModule]
 })
 export class RequestqueuedetailsIndividualRoutingModule { }
+

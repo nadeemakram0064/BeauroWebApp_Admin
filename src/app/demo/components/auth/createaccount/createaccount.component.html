@@ -1,0 +1,128 @@
+<div class="surface-0 flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
+    <div class="grid justify-content-center p-2 lg:p-0" style="min-width:80%">
+        <div class="col-12 mt-5 xl:mt-0 text-center">
+            <img src="assets/layout/images/{{layoutService.config.colorScheme === 'light' ? 'logo-dark' : 'logo-white'}}.svg" alt="Logo" class="mb-5" style="width:81px; height:60px;">
+        </div>
+        <div class="col-12 xl:col-6" style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%);">
+            <div class="h-full w-full m-0 py-7 px-4" style="border-radius:53px; background: linear-gradient(180deg, var(--surface-50) 38.9%, var(--surface-0));">
+                <div class="text-center mb-5">
+                    <img src="assets/demo/images/login/avatar.png" alt="Image" height="50" class="mb-3">
+                    <div class="text-900 text-3xl font-medium mb-3">Create Account</div>
+                    <span class="text-600 font-medium">Join BeauroWeb Admin</span>
+                </div>
+
+                <div class="w-full md:w-10 mx-auto">
+                    <form (ngSubmit)="onCreateAccount()" #createAccountForm="ngForm">
+                        <div class="grid formgrid">
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="firstname" class="block text-900 text-xl font-medium mb-2">First Name</label>
+                                <input id="firstname" type="text" placeholder="Enter your first name" pInputText
+                                       class="w-full" style="padding:1rem;" [(ngModel)]="firstName" name="firstName"
+                                       required #firstNameInput="ngModel">
+                                <small class="p-error" *ngIf="firstNameInput.invalid && firstNameInput.touched">
+                                    First name is required
+                                </small>
+                            </div>
+
+                            <div class="col-12 md:col-6 mb-4">
+                                <label for="lastname" class="block text-900 text-xl font-medium mb-2">Last Name</label>
+                                <input id="lastname" type="text" placeholder="Enter your last name" pInputText
+                                       class="w-full" style="padding:1rem;" [(ngModel)]="lastName" name="lastName"
+                                       required #lastNameInput="ngModel">
+                                <small class="p-error" *ngIf="lastNameInput.invalid && lastNameInput.touched">
+                                    Last name is required
+                                </small>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="email" class="block text-900 text-xl font-medium mb-2">Email</label>
+                                <input id="email" type="email" placeholder="Enter your email address" pInputText
+                                       class="w-full" style="padding:1rem;" [(ngModel)]="email" name="email"
+                                       required email #emailInput="ngModel">
+                                <small class="p-error" *ngIf="emailInput.invalid && emailInput.touched">
+                                    Please enter a valid email address
+                                </small>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="phone" class="block text-900 text-xl font-medium mb-2">Phone Number</label>
+                                <input id="phone" type="tel" placeholder="Enter your phone number" pInputText
+                                       class="w-full" style="padding:1rem;" [(ngModel)]="phone" name="phone"
+                                       required #phoneInput="ngModel">
+                                <small class="p-error" *ngIf="phoneInput.invalid && phoneInput.touched">
+                                    Phone number is required
+                                </small>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="password" class="block text-900 text-xl font-medium mb-2">Password</label>
+                                <p-password id="password" [(ngModel)]="password" placeholder="Create a password"
+                                           [toggleMask]="true" styleClass="w-full" name="password"
+                                           required #passwordInput="ngModel"
+                                           [style]="{'width': '100%'}">
+                                </p-password>
+                                <small class="p-error" *ngIf="passwordInput.invalid && passwordInput.touched">
+                                    Password is required
+                                </small>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="confirmPassword" class="block text-900 text-xl font-medium mb-2">Confirm Password</label>
+                                <p-password id="confirmPassword" [(ngModel)]="confirmPassword" placeholder="Confirm your password"
+                                           [toggleMask]="true" styleClass="w-full" name="confirmPassword"
+                                           required #confirmPasswordInput="ngModel"
+                                           [style]="{'width': '100%'}">
+                                </p-password>
+                                <small class="p-error" *ngIf="confirmPasswordInput.invalid && confirmPasswordInput.touched">
+                                    Please confirm your password
+                                </small>
+                                <small class="p-error" *ngIf="password !== confirmPassword && confirmPasswordInput.touched">
+                                    Passwords do not match
+                                </small>
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="organization" class="block text-900 text-xl font-medium mb-2">Organization</label>
+                                <input id="organization" type="text" placeholder="Enter your organization name" pInputText
+                                       class="w-full" style="padding:1rem;" [(ngModel)]="organization" name="organization">
+                            </div>
+
+                            <div class="col-12 mb-4">
+                                <label for="role" class="block text-900 text-xl font-medium mb-2">Role</label>
+                                <p-dropdown id="role" [(ngModel)]="selectedRole" [options]="roles"
+                                           optionLabel="label" optionValue="value" placeholder="Select your role"
+                                           styleClass="w-full" name="role">
+                                </p-dropdown>
+                            </div>
+
+                            <div class="col-12 mb-5">
+                                <div class="flex align-items-center">
+                                    <p-checkbox id="terms" [(ngModel)]="acceptTerms" [binary]="true"
+                                               styleClass="mr-2" name="acceptTerms" #termsInput="ngModel">
+                                    </p-checkbox>
+                                    <label for="terms" class="text-900">
+                                        I agree to the <a href="#" class="text-primary font-medium">Terms and Conditions</a>
+                                    </label>
+                                </div>
+                                <small class="p-error block mt-1" *ngIf="termsInput.invalid && termsInput.touched">
+                                    You must accept the terms and conditions
+                                </small>
+                            </div>
+                        </div>
+
+                        <button pButton pRipple type="submit" label="Create Account" class="w-full p-3 text-xl"
+                                [disabled]="!createAccountForm.form.valid || password !== confirmPassword || !acceptTerms">
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-4">
+                        <span class="text-600">Already have an account?</span>
+                        <a routerLink="/auth/login" class="font-medium no-underline ml-2 text-primary cursor-pointer">
+                            Sign In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

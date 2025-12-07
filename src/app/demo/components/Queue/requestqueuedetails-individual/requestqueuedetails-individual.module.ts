@@ -21,3 +21,4 @@ import { MessageService } from 'primeng/api';
     providers: [MessageService]
 })
 export class RequestqueuedetailsIndividualModule { }
+
