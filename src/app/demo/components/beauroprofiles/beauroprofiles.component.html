@@ -1,10 +1,503 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card">
-            <h5>Beauro Profiles</h5>
-            <p>Beauro Profiles component content goes here.</p>
+<!-- Statistics Cards -->
+<div class="grid" *ngIf="viewMode.list">
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon">
+                <i class="pi pi-building"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.totalBeauros}}</h3>
+                <span>Total Beauros</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon active">
+                <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.activeBeauros}}</h3>
+                <span>Active</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon verified">
+                <i class="pi pi-shield"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.verifiedBeauros}}</h3>
+                <span>Verified</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon pending">
+                <i class="pi pi-clock"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.pendingVerifications}}</h3>
+                <span>Pending</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon rejected">
+                <i class="pi pi-times-circle"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.rejectedBeauros}}</h3>
+                <span>Rejected</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon chat">
+                <i class="pi pi-comments"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{chatConversations.length}}</h3>
+                <span>Active Chats</span>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- List View -->
+<div class="grid" *ngIf="viewMode.list">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Verified Beauro Profiles</h5>
+                </ng-template>
 
+                <ng-template pTemplate="right">
+                    <p-dropdown [options]="verificationStatusOptions" [(ngModel)]="selectedVerificationStatus"
+                               (onChange)="onVerificationStatusFilter($event)" placeholder="Filter by Status"
+                               styleClass="mr-2"></p-dropdown>
+
+                    <p-selectButton [options]="[
+                        {label: 'Active', value: true},
+                        {label: 'Inactive', value: false}
+                    ]" [(ngModel)]="selectedActiveStatus" (onChange)="onActiveStatusFilter($event)"
+                    styleClass="mr-2"></p-selectButton>
+
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter (input)="onGlobalFilter(dt, $event)"
+                               placeholder="Search beauros..." class="w-full"/>
+                    </span>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="beauroProfiles" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
+                     [loading]="loading" [lazy]="true" [(selection)]="selectedProfile" [rowHover]="true"
+                     dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                     [showCurrentPageReport]="true" responsiveLayout="scroll" (onPage)="onPageChange($event)"
+                     [first]="first">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="companyName" style="min-width:20rem">
+                            Company <p-sortIcon field="companyName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="contactPerson" style="min-width:15rem">
+                            Contact Person <p-sortIcon field="contactPerson"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="city" style="min-width:12rem">
+                            Location <p-sortIcon field="city"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="verificationStatus" style="min-width:12rem">
+                            Status <p-sortIcon field="verificationStatus"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rating" style="min-width:10rem">
+                            Rating <p-sortIcon field="rating"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="totalProjects" style="min-width:12rem">
+                            Projects <p-sortIcon field="totalProjects"></p-sortIcon>
+                        </th>
+                        <th style="min-width:15rem">Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-beauro>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="beauro"></p-tableCheckbox>
+                        </td>
+                        <td>
+                            <div class="flex align-items-center">
+                                <div class="company-avatar mr-3">
+                                    <img *ngIf="beauro.profileImageUrl" [src]="beauro.profileImageUrl"
+                                         alt="Company" class="avatar-img">
+                                    <div *ngIf="!beauro.profileImageUrl" class="avatar-placeholder">
+                                        {{beauro.companyName.charAt(0).toUpperCase()}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-medium">{{beauro.companyName}}</div>
+                                    <div class="text-sm text-500">{{beauro.businessLicense}}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="font-medium">{{beauro.contactPerson}}</div>
+                            <div class="text-sm text-500">{{beauro.email}}</div>
+                        </td>
+                        <td>
+                            <div>{{beauro.city}}, {{beauro.country}}</div>
+                            <div class="text-sm text-500">{{beauro.phone}}</div>
+                        </td>
+                        <td>
+                            <p-tag [value]="beauro.verificationStatus" [severity]="getVerificationStatusSeverity(beauro.verificationStatus)">
+                                <i [class]="getStatusIcon(beauro.verificationStatus)" class="mr-1"></i>
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="rating-display">
+                                <p-rating [(ngModel)]="beauro.rating" [readonly]="true" [cancel]="false" styleClass="rating-stars"></p-rating>
+                                <span class="rating-text">{{beauro.rating}}/5</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="project-stats">
+                                <div class="completed">{{beauro.completedProjects}}/{{beauro.totalProjects}}</div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill"
+                                         [style.width.%]="beauro.totalProjects > 0 ? (beauro.completedProjects / beauro.totalProjects) * 100 : 0"></div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-info mr-2"
+                                         pTooltip="View Details" tooltipPosition="top"
+                                         (onClick)="viewProfileDetails(beauro)"></p-button>
+                                <p-button icon="pi pi-comments" styleClass="p-button-rounded p-button-success mr-2"
+                                         pTooltip="Chat" tooltipPosition="top"
+                                         (onClick)="openChat(beauro)"></p-button>
+                                <p-button *ngIf="beauro.isActive" icon="pi pi-ban" styleClass="p-button-rounded p-button-danger mr-2"
+                                         pTooltip="Deactivate" tooltipPosition="top"
+                                         (onClick)="deactivateProfile(beauro)"></p-button>
+                                <p-button *ngIf="!beauro.isActive" icon="pi pi-check" styleClass="p-button-rounded p-button-success"
+                                         pTooltip="Activate" tooltipPosition="top"
+                                         (onClick)="activateProfile(beauro)"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="empty-state">
+                                <i class="pi pi-building empty-icon"></i>
+                                <h4>No Beauro profiles found</h4>
+                                <p>No verified Beauro profiles match your criteria.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<!-- Detail View -->
+<div class="grid" *ngIf="viewMode.detail && selectedProfile">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <p-button label="Back to List" icon="pi pi-arrow-left" styleClass="p-button-secondary mr-2"
+                             (onClick)="goBack()"></p-button>
+                    <div class="profile-header">
+                        <div class="company-avatar-large">
+                            <img *ngIf="selectedProfile.profileImageUrl" [src]="selectedProfile.profileImageUrl"
+                                 alt="Company" class="avatar-img-large">
+                            <div *ngIf="!selectedProfile.profileImageUrl" class="avatar-placeholder-large">
+                                {{selectedProfile.companyName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <h4>{{selectedProfile.companyName}}</h4>
+                            <p class="text-600">{{selectedProfile.contactPerson}}</p>
+                            <div class="profile-badges">
+                                <p-tag [value]="selectedProfile.verificationStatus"
+                                       [severity]="getVerificationStatusSeverity(selectedProfile.verificationStatus)">
+                                    <i [class]="getStatusIcon(selectedProfile.verificationStatus)" class="mr-1"></i>
+                                </p-tag>
+                                <p-tag [value]="selectedProfile.isActive ? 'Active' : 'Inactive'"
+                                       [severity]="selectedProfile.isActive ? 'success' : 'danger'">
+                                </p-tag>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-button label="Chat" icon="pi pi-comments" styleClass="p-button-success mr-2"
+                             (onClick)="openChat(selectedProfile)"></p-button>
+                    <p-button *ngIf="selectedProfile.isActive" label="Deactivate" icon="pi pi-ban"
+                             styleClass="p-button-danger" (onClick)="deactivateProfile(selectedProfile)"></p-button>
+                    <p-button *ngIf="!selectedProfile.isActive" label="Activate" icon="pi pi-check"
+                             styleClass="p-button-success" (onClick)="activateProfile(selectedProfile)"></p-button>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="profile-details">
+                <div class="grid">
+                    <div class="col-12 md:col-8">
+                        <div class="card">
+                            <h5>Marriage Bureau Information</h5>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>Bureau Name:</label>
+                                    <span>{{selectedProfile.companyName}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Proprietor:</label>
+                                    <span>{{selectedProfile.contactPerson}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Established:</label>
+                                    <span>{{selectedProfile.createdAt | date:'yyyy'}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Experience:</label>
+                                    <span>{{getExperienceYears(selectedProfile.createdAt)}} years</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Email:</label>
+                                    <span>{{selectedProfile.email}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Phone:</label>
+                                    <span>{{selectedProfile.phone}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Address:</label>
+                                    <span>{{selectedProfile.address}}, {{selectedProfile.city}}, {{selectedProfile.country}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>License Number:</label>
+                                    <span>{{selectedProfile.businessLicense}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Services & Specializations</h5>
+                            <div class="services-section">
+                                <div class="services-tags">
+                                    <p-chip *ngFor="let service of selectedProfile.services" [label]="service"
+                                           styleClass="mr-2 mb-2"></p-chip>
+                                </div>
+                                <div class="specializations">
+                                    <h6>Religious Communities Served</h6>
+                                    <div class="community-tags">
+                                        <p-chip label="Hindu" styleClass="mr-2 mb-2" [style]="{'background-color': '#ff6b6b'}"></p-chip>
+                                        <p-chip label="Muslim" styleClass="mr-2 mb-2" [style]="{'background-color': '#4ecdc4'}"></p-chip>
+                                        <p-chip label="Christian" styleClass="mr-2 mb-2" [style]="{'background-color': '#45b7d1'}"></p-chip>
+                                        <p-chip label="Sikh" styleClass="mr-2 mb-2" [style]="{'background-color': '#96ceb4'}"></p-chip>
+                                    </div>
+                                </div>
+                                <div class="description">
+                                    <h6>About Us</h6>
+                                    <p>{{selectedProfile.description}}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Success Metrics</h5>
+                            <div class="metrics-grid">
+                                <div class="metric-item">
+                                    <div class="metric-value">{{selectedProfile.rating}}</div>
+                                    <div class="metric-label">Client Rating</div>
+                                    <p-rating [(ngModel)]="selectedProfile.rating" [readonly]="true" [cancel]="false"></p-rating>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">{{selectedProfile.totalProjects}}</div>
+                                    <div class="metric-label">Total Matches Made</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">{{selectedProfile.completedProjects}}</div>
+                                    <div class="metric-label">Successful Marriages</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-value">{{selectedProfile.totalProjects > 0 ? ((selectedProfile.completedProjects / selectedProfile.totalProjects) * 100).toFixed(1) : 0}}%</div>
+                                    <div class="metric-label">Success Rate</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="card">
+                            <h5>Certifications & Licenses</h5>
+                            <div class="documents-list">
+                                <div *ngFor="let doc of selectedProfile.documents" class="document-item">
+                                    <div class="document-info">
+                                        <i class="pi pi-file document-icon"></i>
+                                        <div class="document-details">
+                                            <span class="document-name">{{doc.name}}</span>
+                                            <span class="document-meta">{{doc.uploadedAt | date:'short'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="document-status">
+                                        <p-tag [value]="doc.verified ? 'Verified' : 'Under Review'"
+                                               [severity]="doc.verified ? 'success' : 'warning'"></p-tag>
+                                        <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text ml-2"
+                                                 pTooltip="View Certificate" tooltipPosition="top"></p-button>
+                                    </div>
+                                </div>
+                                <div class="certification-note">
+                                    <small class="text-600">All certificates are verified by authorized bodies</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Bureau Timeline</h5>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="pi pi-building"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Bureau Established</div>
+                                        <div class="timeline-date">{{selectedProfile.createdAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" *ngIf="selectedProfile.verifiedAt">
+                                    <div class="timeline-marker verified">
+                                        <i class="pi pi-certificate"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">License Verified</div>
+                                        <div class="timeline-date">{{selectedProfile.verifiedAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker success">
+                                        <i class="pi pi-star"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">100th Successful Match</div>
+                                        <div class="timeline-date">2 months ago</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker updated">
+                                        <i class="pi pi-refresh"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Profile Updated</div>
+                                        <div class="timeline-date">{{selectedProfile.updatedAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat View -->
+<div class="grid" *ngIf="viewMode.chat && selectedProfile">
+    <div class="col-12">
+        <div class="card chat-card">
+            <p-toolbar styleClass="mb-0">
+                <ng-template pTemplate="left">
+                    <p-button label="Back to Details" icon="pi pi-arrow-left" styleClass="p-button-secondary mr-2"
+                             (onClick)="goBackToDetail()"></p-button>
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <img *ngIf="selectedProfile.profileImageUrl" [src]="selectedProfile.profileImageUrl"
+                                 alt="Company" class="avatar-img">
+                            <div *ngIf="!selectedProfile.profileImageUrl" class="avatar-placeholder">
+                                {{selectedProfile.companyName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                        <div class="chat-info">
+                            <h5>{{selectedProfile.companyName}}</h5>
+                            <span class="chat-status">{{selectedProfile.contactPerson}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-button icon="pi pi-ellipsis-v" styleClass="p-button-rounded p-button-text"></p-button>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="chat-container">
+                <div class="chat-messages" *ngIf="!chatLoading">
+                    <div *ngFor="let message of chatMessages" class="message-item"
+                         [class.sent]="message.senderType === 'admin'"
+                         [class.received]="message.senderType === 'beauro'">
+                        <div class="message-content">
+                            <div class="message-text">{{message.message}}</div>
+                            <div class="message-time">{{message.timestamp | date:'short'}}</div>
+                        </div>
+                        <div class="message-avatar">
+                            <div class="avatar-small">
+                                {{message.senderName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-loading" *ngIf="chatLoading">
+                    <p-progressSpinner></p-progressSpinner>
+                    <span>Loading messages...</span>
+                </div>
+
+                <div class="chat-input">
+                    <div class="file-attachments" *ngIf="selectedChatFiles.length > 0">
+                        <div *ngFor="let file of selectedChatFiles; let i = index" class="file-attachment">
+                            <div class="file-info">
+                                <i class="pi pi-file"></i>
+                                <span>{{file.name}}</span>
+                                <span class="file-size">({{formatFileSize(file.size)}})</span>
+                            </div>
+                            <button type="button" class="remove-file" (click)="removeChatFile(i)">
+                                <i class="pi pi-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <label for="chatFile" class="file-input-btn">
+                            <i class="pi pi-paperclip"></i>
+                        </label>
+                        <input type="file" id="chatFile" multiple accept="*/*"
+                               (change)="onFileSelected($event)" style="display: none;">
+
+                        <input type="text" pInputText [(ngModel)]="newMessage"
+                               placeholder="Type your message..." class="message-input"
+                               (keyup.enter)="sendMessage()">
+
+                        <p-button icon="pi pi-send" styleClass="p-button-rounded p-button-primary send-btn"
+                                 [loading]="sendingMessage" (onClick)="sendMessage()"
+                                 [disabled]="!newMessage.trim() && selectedChatFiles.length === 0"></p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>

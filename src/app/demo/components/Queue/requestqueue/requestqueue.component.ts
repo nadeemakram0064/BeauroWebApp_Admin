@@ -165,9 +165,9 @@ export class RequestqueueComponent implements OnInit {
         this.requestService.setSelectedRequest(requestId, requestType);
 
         // Navigate based on request type
-        if (requestType === 'Beauro') {
+        if (requestType === 'Individual profile') {
             this.router.navigate(['/requestqueuedetails-beauro']);
-        } else if (requestType === 'Individual profile') {
+        } else if (requestType === 'Beauro') {
             this.router.navigate(['/requestqueuedetails-individual']);
         } else {
             // Default fallback

@@ -1,10 +1,600 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card">
-            <h5>Individual Profiles</h5>
-            <p>Individual Profiles component content goes here.</p>
+<!-- Statistics Cards -->
+<div class="grid" *ngIf="viewMode.list">
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon">
+                <i class="pi pi-users"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.totalIndividuals}}</h3>
+                <span>Total Individuals</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon active">
+                <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.activeIndividuals}}</h3>
+                <span>Active</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon verified">
+                <i class="pi pi-shield"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.verifiedIndividuals}}</h3>
+                <span>Verified</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon pending">
+                <i class="pi pi-clock"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{stats.pendingVerifications}}</h3>
+                <span>Pending</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-2">
+        <div class="card stats-card">
+            <div class="stats-icon chat">
+                <i class="pi pi-comments"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{chatConversations.length}}</h3>
+                <span>Active Chats</span>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- List View -->
+<div class="grid" *ngIf="viewMode.list">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Verified Individual Profiles</h5>
+                </ng-template>
 
+                <ng-template pTemplate="right">
+                    <p-dropdown [options]="verificationStatusOptions" [(ngModel)]="selectedVerificationStatus"
+                               (onChange)="onVerificationStatusFilter($event)" placeholder="Filter by Status"
+                               styleClass="mr-2"></p-dropdown>
+
+                    <p-dropdown [options]="availabilityStatusOptions" [(ngModel)]="selectedAvailabilityStatus"
+                               (onChange)="onAvailabilityStatusFilter($event)" placeholder="Availability"
+                               styleClass="mr-2"></p-dropdown>
+
+                    <p-selectButton [options]="[
+                        {label: 'Active', value: true},
+                        {label: 'Inactive', value: false}
+                    ]" [(ngModel)]="selectedActiveStatus" (onChange)="onActiveStatusFilter($event)"
+                    styleClass="mr-2"></p-selectButton>
+
+                    <span class="p-input-icon-left">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" #filter (input)="onGlobalFilter(dt, $event)"
+                               placeholder="Search individuals..." class="w-full"/>
+                    </span>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table #dt [value]="individualProfiles" [paginator]="true" [rows]="rows" [totalRecords]="totalRecords"
+                     [loading]="loading" [lazy]="true" [(selection)]="selectedProfile" [rowHover]="true"
+                     dataKey="id" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                     [showCurrentPageReport]="true" responsiveLayout="scroll" (onPage)="onPageChange($event)"
+                     [first]="first">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 4rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="firstName" style="min-width:18rem">
+                            Name <p-sortIcon field="firstName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="occupation" style="min-width:15rem">
+                            Occupation <p-sortIcon field="occupation"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="city" style="min-width:12rem">
+                            Location <p-sortIcon field="city"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="availabilityStatus" style="min-width:12rem">
+                            Availability <p-sortIcon field="availabilityStatus"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="verificationStatus" style="min-width:12rem">
+                            Status <p-sortIcon field="verificationStatus"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="rating" style="min-width:10rem">
+                            Rating <p-sortIcon field="rating"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="hourlyRate" style="min-width:10rem">
+                            Rate <p-sortIcon field="hourlyRate"></p-sortIcon>
+                        </th>
+                        <th style="min-width:15rem">Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-individual>
+                    <tr>
+                        <td>
+                            <p-tableCheckbox [value]="individual"></p-tableCheckbox>
+                        </td>
+                        <td>
+                            <div class="flex align-items-center">
+                                <div class="user-avatar mr-3">
+                                    <img *ngIf="individual.profileImageUrl" [src]="individual.profileImageUrl"
+                                         alt="Profile" class="avatar-img">
+                                    <div *ngIf="!individual.profileImageUrl" class="avatar-placeholder">
+                                        {{individual.firstName.charAt(0).toUpperCase()}}{{individual.lastName.charAt(0).toUpperCase()}}
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="font-medium">{{getFullName(individual)}}</div>
+                                    <div class="text-sm text-500">{{individual.email}}</div>
+                                    <div class="text-sm text-500">{{getAge(individual.dateOfBirth)}} years old</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="font-medium">{{individual.occupation}}</div>
+                            <div class="text-sm text-500">{{individual.experience}} years exp.</div>
+                        </td>
+                        <td>
+                            <div>{{individual.city}}, {{individual.country}}</div>
+                            <div class="text-sm text-500">{{individual.phone}}</div>
+                        </td>
+                        <td>
+                            <div class="availability-status">
+                                <span class="status-dot" [style.background-color]="getAvailabilityStatusColor(individual.availabilityStatus)"></span>
+                                <span class="status-text">{{individual.availabilityStatus | titlecase}}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <p-tag [value]="individual.verificationStatus" [severity]="getVerificationStatusSeverity(individual.verificationStatus)">
+                                <i [class]="getStatusIcon(individual.verificationStatus)" class="mr-1"></i>
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="rating-display">
+                                <p-rating [(ngModel)]="individual.rating" [readonly]="true" [cancel]="false" styleClass="rating-stars"></p-rating>
+                                <span class="rating-text">{{individual.rating}}/5</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="rate-display" *ngIf="individual.hourlyRate">
+                                ${{individual.hourlyRate}}/hr
+                            </div>
+                            <div class="rate-display" *ngIf="!individual.hourlyRate">
+                                <span class="text-500">Not set</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-info mr-2"
+                                         pTooltip="View Details" tooltipPosition="top"
+                                         (onClick)="viewProfileDetails(individual)"></p-button>
+                                <p-button icon="pi pi-comments" styleClass="p-button-rounded p-button-success mr-2"
+                                         pTooltip="Chat" tooltipPosition="top"
+                                         (onClick)="openChat(individual)"></p-button>
+                                <p-button *ngIf="individual.isActive" icon="pi pi-ban" styleClass="p-button-rounded p-button-danger mr-2"
+                                         pTooltip="Deactivate" tooltipPosition="top"
+                                         (onClick)="deactivateProfile(individual)"></p-button>
+                                <p-button *ngIf="!individual.isActive" icon="pi pi-check" styleClass="p-button-rounded p-button-success"
+                                         pTooltip="Activate" tooltipPosition="top"
+                                         (onClick)="activateProfile(individual)"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="9" class="text-center py-4">
+                            <div class="empty-state">
+                                <i class="pi pi-users empty-icon"></i>
+                                <h4>No Individual profiles found</h4>
+                                <p>No verified individual profiles match your criteria.</p>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<!-- Detail View -->
+<div class="grid" *ngIf="viewMode.detail && selectedProfile">
+    <div class="col-12">
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <p-button label="Back to List" icon="pi pi-arrow-left" styleClass="p-button-secondary mr-2"
+                             (onClick)="goBack()"></p-button>
+                    <div class="profile-header">
+                        <div class="user-avatar-large">
+                            <img *ngIf="selectedProfile.profileImageUrl" [src]="selectedProfile.profileImageUrl"
+                                 alt="Profile" class="avatar-img-large">
+                            <div *ngIf="!selectedProfile.profileImageUrl" class="avatar-placeholder-large">
+                                {{selectedProfile.firstName.charAt(0).toUpperCase()}}{{selectedProfile.lastName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                        <div class="profile-info">
+                            <h4>{{getFullName(selectedProfile)}}</h4>
+                            <p class="text-600">{{selectedProfile.occupation}} • {{selectedProfile.experience}} years experience</p>
+                            <div class="profile-badges">
+                                <p-tag [value]="selectedProfile.verificationStatus"
+                                       [severity]="getVerificationStatusSeverity(selectedProfile.verificationStatus)">
+                                    <i [class]="getStatusIcon(selectedProfile.verificationStatus)" class="mr-1"></i>
+                                </p-tag>
+                                <p-tag [value]="selectedProfile.availabilityStatus | titlecase"
+                                       [style]="{'background-color': getAvailabilityStatusColor(selectedProfile.availabilityStatus)}">
+                                </p-tag>
+                                <p-tag [value]="selectedProfile.isActive ? 'Active' : 'Inactive'"
+                                       [severity]="selectedProfile.isActive ? 'success' : 'danger'">
+                                </p-tag>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-button label="Chat" icon="pi pi-comments" styleClass="p-button-success mr-2"
+                             (onClick)="openChat(selectedProfile)"></p-button>
+                    <p-button *ngIf="selectedProfile.isActive" label="Deactivate" icon="pi pi-ban"
+                             styleClass="p-button-danger" (onClick)="deactivateProfile(selectedProfile)"></p-button>
+                    <p-button *ngIf="!selectedProfile.isActive" label="Activate" icon="pi pi-check"
+                             styleClass="p-button-success" (onClick)="activateProfile(selectedProfile)"></p-button>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="profile-details">
+                <div class="grid">
+                    <div class="col-12 md:col-8">
+                        <div class="card">
+                            <h5>Basic Information</h5>
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>Full Name:</label>
+                                    <span>{{getFullName(selectedProfile)}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Age:</label>
+                                    <span>{{getAge(selectedProfile.dateOfBirth)}} years</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Date of Birth:</label>
+                                    <span>{{selectedProfile.dateOfBirth | date:'mediumDate'}}</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Height:</label>
+                                    <span>5'8" (173 cm)</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Marital Status:</label>
+                                    <span>Never Married</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Mother Tongue:</label>
+                                    <span>English</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Religion:</label>
+                                    <span>Hindu</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>Caste:</label>
+                                    <span>Brahmin</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Education & Career</h5>
+                            <div class="education-section">
+                                <div class="education-container">
+                                    <h6>Education</h6>
+                                    <div class="education-details">
+                                        <div class="education-item">
+                                            <strong>Highest Qualification:</strong> Master's in Computer Science
+                                        </div>
+                                        <div class="education-item">
+                                            <strong>College/University:</strong> Stanford University
+                                        </div>
+                                        <div class="education-item">
+                                            <strong>Year of Completion:</strong> 2020
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="career-container">
+                                    <h6>Career & Income</h6>
+                                    <div class="career-details">
+                                        <div class="career-item">
+                                            <strong>Occupation:</strong> {{selectedProfile.occupation}}
+                                        </div>
+                                        <div class="career-item">
+                                            <strong>Company:</strong> Tech Corp Inc.
+                                        </div>
+                                        <div class="career-item">
+                                            <strong>Annual Income:</strong> $85,000 - $95,000
+                                        </div>
+                                        <div class="career-item">
+                                            <strong>Experience:</strong> {{selectedProfile.experience}} years
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Family Background</h5>
+                            <div class="family-section">
+                                <div class="family-details">
+                                    <div class="family-item">
+                                        <strong>Father's Occupation:</strong> Business Owner
+                                    </div>
+                                    <div class="family-item">
+                                        <strong>Mother's Occupation:</strong> Homemaker
+                                    </div>
+                                    <div class="family-item">
+                                        <strong>Number of Siblings:</strong> 1 Brother, 1 Sister
+                                    </div>
+                                    <div class="family-item">
+                                        <strong>Family Type:</strong> Nuclear Family
+                                    </div>
+                                    <div class="family-item">
+                                        <strong>Family Values:</strong> Traditional
+                                    </div>
+                                    <div class="family-item">
+                                        <strong>Native Place:</strong> {{selectedProfile.city}}, {{selectedProfile.country}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Lifestyle & Preferences</h5>
+                            <div class="lifestyle-section">
+                                <div class="lifestyle-details">
+                                    <div class="lifestyle-item">
+                                        <strong>Diet:</strong> Vegetarian
+                                    </div>
+                                    <div class="lifestyle-item">
+                                        <strong>Smoking:</strong> No
+                                    </div>
+                                    <div class="lifestyle-item">
+                                        <strong>Drinking:</strong> No
+                                    </div>
+                                    <div class="lifestyle-item">
+                                        <strong>Complexion:</strong> Fair
+                                    </div>
+                                    <div class="lifestyle-item">
+                                        <strong>Body Type:</strong> Athletic
+                                    </div>
+                                    <div class="lifestyle-item">
+                                        <strong>Hobbies:</strong> Reading, Traveling, Cooking
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Partner Preferences</h5>
+                            <div class="preferences-section">
+                                <div class="preferences-details">
+                                    <div class="preference-item">
+                                        <strong>Age Range:</strong> 25-32 years
+                                    </div>
+                                    <div class="preference-item">
+                                        <strong>Height Range:</strong> 5'6" - 6'0"
+                                    </div>
+                                    <div class="preference-item">
+                                        <strong>Education:</strong> Bachelor's or higher
+                                    </div>
+                                    <div class="preference-item">
+                                        <strong>Religion:</strong> Hindu
+                                    </div>
+                                    <div class="preference-item">
+                                        <strong>Location:</strong> Same city preferred
+                                    </div>
+                                    <div class="preference-item">
+                                        <strong>Marital Status:</strong> Never Married
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-4">
+                        <div class="card">
+                            <h5>Contact Information</h5>
+                            <div class="contact-section">
+                                <div class="contact-details">
+                                    <div class="contact-item">
+                                        <i class="pi pi-envelope"></i>
+                                        <span>{{selectedProfile.email}}</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="pi pi-phone"></i>
+                                        <span>{{selectedProfile.phone}}</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="pi pi-map-marker"></i>
+                                        <span>{{selectedProfile.address}}, {{selectedProfile.city}}, {{selectedProfile.country}}</span>
+                                    </div>
+                                </div>
+                                <div class="contact-note">
+                                    <small class="text-600">Contact details will be shared only after mutual interest</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Verification Documents</h5>
+                            <div class="documents-list">
+                                <div *ngFor="let doc of selectedProfile.documents" class="document-item">
+                                    <div class="document-info">
+                                        <i class="pi pi-file document-icon"></i>
+                                        <div class="document-details">
+                                            <span class="document-name">{{doc.name}}</span>
+                                            <span class="document-meta">{{doc.uploadedAt | date:'short'}}</span>
+                                        </div>
+                                    </div>
+                                    <div class="document-status">
+                                        <p-tag [value]="doc.verified ? 'Verified' : 'Under Review'"
+                                               [severity]="doc.verified ? 'success' : 'warning'"></p-tag>
+                                        <p-button icon="pi pi-eye" styleClass="p-button-rounded p-button-text ml-2"
+                                                 pTooltip="View Document" tooltipPosition="top"></p-button>
+                                    </div>
+                                </div>
+                                <div class="verification-note">
+                                    <small class="text-600">All documents are verified for authenticity and security</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mt-3">
+                            <h5>Profile Activity</h5>
+                            <div class="timeline">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker">
+                                        <i class="pi pi-user-plus"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Profile Created</div>
+                                        <div class="timeline-date">{{selectedProfile.createdAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item" *ngIf="selectedProfile.verifiedAt">
+                                    <div class="timeline-marker verified">
+                                        <i class="pi pi-check-circle"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Profile Verified</div>
+                                        <div class="timeline-date">{{selectedProfile.verifiedAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker activity">
+                                        <i class="pi pi-eye"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Profile Last Viewed</div>
+                                        <div class="timeline-date">{{selectedProfile.updatedAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                                <div class="timeline-item">
+                                    <div class="timeline-marker updated">
+                                        <i class="pi pi-refresh"></i>
+                                    </div>
+                                    <div class="timeline-content">
+                                        <div class="timeline-title">Profile Updated</div>
+                                        <div class="timeline-date">{{selectedProfile.updatedAt | date:'medium'}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chat View -->
+<div class="grid" *ngIf="viewMode.chat && selectedProfile">
+    <div class="col-12">
+        <div class="card chat-card">
+            <p-toolbar styleClass="mb-0">
+                <ng-template pTemplate="left">
+                    <p-button label="Back to Details" icon="pi pi-arrow-left" styleClass="p-button-secondary mr-2"
+                             (onClick)="goBackToDetail()"></p-button>
+                    <div class="chat-header">
+                        <div class="chat-avatar">
+                            <img *ngIf="selectedProfile.profileImageUrl" [src]="selectedProfile.profileImageUrl"
+                                 alt="Profile" class="avatar-img">
+                            <div *ngIf="!selectedProfile.profileImageUrl" class="avatar-placeholder">
+                                {{selectedProfile.firstName.charAt(0).toUpperCase()}}{{selectedProfile.lastName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                        <div class="chat-info">
+                            <h5>{{getFullName(selectedProfile)}}</h5>
+                            <span class="chat-status">{{selectedProfile.occupation}}</span>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-button icon="pi pi-ellipsis-v" styleClass="p-button-rounded p-button-text"></p-button>
+                </ng-template>
+            </p-toolbar>
+
+            <div class="chat-container">
+                <div class="chat-messages" *ngIf="!chatLoading">
+                    <div *ngFor="let message of chatMessages" class="message-item"
+                         [class.sent]="message.senderType === 'admin'"
+                         [class.received]="message.senderType === 'individual'">
+                        <div class="message-content">
+                            <div class="message-text">{{message.message}}</div>
+                            <div class="message-time">{{message.timestamp | date:'short'}}</div>
+                        </div>
+                        <div class="message-avatar">
+                            <div class="avatar-small">
+                                {{message.senderName.charAt(0).toUpperCase()}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chat-loading" *ngIf="chatLoading">
+                    <p-progressSpinner></p-progressSpinner>
+                    <span>Loading messages...</span>
+                </div>
+
+                <div class="chat-input">
+                    <div class="file-attachments" *ngIf="selectedChatFiles.length > 0">
+                        <div *ngFor="let file of selectedChatFiles; let i = index" class="file-attachment">
+                            <div class="file-info">
+                                <i class="pi pi-file"></i>
+                                <span>{{file.name}}</span>
+                                <span class="file-size">({{formatFileSize(file.size)}})</span>
+                            </div>
+                            <button type="button" class="remove-file" (click)="removeChatFile(i)">
+                                <i class="pi pi-times"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="input-container">
+                        <label for="chatFile" class="file-input-btn">
+                            <i class="pi pi-paperclip"></i>
+                        </label>
+                        <input type="file" id="chatFile" multiple accept="*/*"
+                               (change)="onFileSelected($event)" style="display: none;">
+
+                        <input type="text" pInputText [(ngModel)]="newMessage"
+                               placeholder="Type your message..." class="message-input"
+                               (keyup.enter)="sendMessage()">
+
+                        <p-button icon="pi pi-send" styleClass="p-button-rounded p-button-primary send-btn"
+                                 [loading]="sendingMessage" (onClick)="sendMessage()"
+                                 [disabled]="!newMessage.trim() && selectedChatFiles.length === 0"></p-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>

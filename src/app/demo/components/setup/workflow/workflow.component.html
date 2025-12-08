@@ -1,10 +1,419 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card">
-            <h5>Workflow</h5>
-            <p>Workflow component content goes here.</p>
+<!-- Statistics Cards -->
+<div class="grid" *ngIf="!showAddForm">
+    <div class="col-12 md:col-3">
+        <div class="card stats-card">
+            <div class="stats-icon">
+                <i class="pi pi-sitemap"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{workflows.length}}</h3>
+                <span>Total Workflows</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card active">
+            <div class="stats-icon active">
+                <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getActiveWorkflowsCount()}}</h3>
+                <span>Active Workflows</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card approval">
+            <div class="stats-icon approval">
+                <i class="pi pi-thumbs-up"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getApprovalWorkflowsCount()}}</h3>
+                <span>Approval Workflows</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card automated">
+            <div class="stats-icon automated">
+                <i class="pi pi-cog"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getAutomatedWorkflowsCount()}}</h3>
+                <span>Automated Workflows</span>
+            </div>
         </div>
     </div>
 </div>
+
+<!-- Main Content -->
+<div class="grid">
+    <div class="col-12">
+        <!-- Header with Add Button -->
+        <div class="card">
+            <p-toolbar styleClass="mb-0">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Workflow Management</h5>
+                    <small class="text-muted ml-2">Create and manage automated workflows</small>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <p-button
+                        label="Add New Workflow"
+                        icon="pi pi-plus"
+                        styleClass="p-button-primary"
+                        (onClick)="toggleAddForm()"
+                        [disabled]="showAddForm">
+                    </p-button>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <!-- Add/Edit Form -->
+        <div class="card" *ngIf="showAddForm">
+            <h5>{{editingWorkflow ? 'Edit Workflow' : 'Create New Workflow'}}</h5>
+
+            <form [formGroup]="workflowForm" (ngSubmit)="editingWorkflow ? updateWorkflow() : onSubmit()">
+                <div class="grid">
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label for="name" class="form-label">Workflow Name *</label>
+                            <input
+                                id="name"
+                                type="text"
+                                pInputText
+                                formControlName="name"
+                                placeholder="e.g., User Registration Approval"
+                                [class.ng-invalid]="workflowForm.get('name')?.invalid && workflowForm.get('name')?.touched">
+
+                            <small class="form-help">Enter a descriptive name for the workflow</small>
+
+                            <small class="p-error" *ngIf="workflowForm.get('name')?.invalid && workflowForm.get('name')?.touched">
+                                <span *ngIf="workflowForm.get('name')?.errors?.['required']">Workflow name is required</span>
+                                <span *ngIf="workflowForm.get('name')?.errors?.['minlength']">Name must be at least 3 characters</span>
+                                <span *ngIf="workflowForm.get('name')?.errors?.['maxlength']">Name cannot exceed 100 characters</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label for="type" class="form-label">Workflow Type *</label>
+                            <p-dropdown
+                                id="type"
+                                formControlName="type"
+                                [options]="workflowTypes"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select workflow type"
+                                styleClass="w-full"
+                                [class.ng-invalid]="workflowForm.get('type')?.invalid && workflowForm.get('type')?.touched">
+
+                                <ng-template let-option pTemplate="item">
+                                    <div class="flex align-items-center">
+                                        <span class="font-medium">{{option.label}}</span>
+                                        <small class="text-muted ml-2">{{option.description}}</small>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+
+                            <small class="p-error" *ngIf="workflowForm.get('type')?.invalid && workflowForm.get('type')?.touched">
+                                Workflow type is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label for="assignedUserId" class="form-label">Assigned User *</label>
+                            <p-dropdown
+                                id="assignedUserId"
+                                formControlName="assignedUserId"
+                                [options]="users"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Select assigned user"
+                                styleClass="w-full"
+                                [class.ng-invalid]="workflowForm.get('assignedUserId')?.invalid && workflowForm.get('assignedUserId')?.touched">
+
+                                <ng-template let-option pTemplate="item">
+                                    <div class="flex align-items-center">
+                                        <div class="user-info">
+                                            <span class="font-medium">{{option.name}}</span>
+                                            <small class="text-muted block">{{option.email}}</small>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                                <ng-template let-option pTemplate="selectedItem">
+                                    <div class="flex align-items-center">
+                                        <span class="font-medium">{{option.name}}</span>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+
+                            <small class="p-error" *ngIf="workflowForm.get('assignedUserId')?.invalid && workflowForm.get('assignedUserId')?.touched">
+                                Assigned user is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label class="form-label">Workflow Status</label>
+                            <div class="status-toggle">
+                                <p-inputSwitch
+                                    formControlName="isActive"
+                                    inputId="isActive">
+                                </p-inputSwitch>
+                                <label htmlFor="isActive" class="status-label ml-2">
+                                    {{workflowForm.get('isActive')?.value ? 'Active' : 'Inactive'}}
+                                </label>
+                            </div>
+                            <small class="form-help">Toggle to activate or deactivate the workflow</small>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-field">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <textarea
+                                id="description"
+                                pInputTextarea
+                                formControlName="description"
+                                placeholder="Describe what this workflow does..."
+                                rows="3"
+                                class="w-full"
+                                [class.ng-invalid]="workflowForm.get('description')?.invalid && workflowForm.get('description')?.touched">
+                            </textarea>
+
+                            <small class="form-help">Provide a clear description of the workflow's purpose and functionality</small>
+
+                            <small class="p-error" *ngIf="workflowForm.get('description')?.invalid && workflowForm.get('description')?.touched">
+                                <span *ngIf="workflowForm.get('description')?.errors?.['maxlength']">Description cannot exceed 500 characters</span>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <p-button
+                        type="button"
+                        label="Cancel"
+                        icon="pi pi-times"
+                        styleClass="p-button-secondary mr-2"
+                        (onClick)="cancelEdit()">
+                    </p-button>
+
+                    <p-button
+                        type="submit"
+                        [label]="editingWorkflow ? 'Update Workflow' : 'Create Workflow'"
+                        icon="pi pi-check"
+                        styleClass="p-button-primary"
+                        [loading]="isSubmitting"
+                        [disabled]="workflowForm.invalid">
+                    </p-button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Filters and Search -->
+        <div class="card">
+            <div class="grid">
+                <div class="col-12 md:col-4">
+                    <div class="form-field">
+                        <label for="globalFilter" class="form-label">Search Workflows</label>
+                        <input
+                            id="globalFilter"
+                            type="text"
+                            pInputText
+                            [(ngModel)]="globalFilterValue"
+                            placeholder="Search by name, description, or user..."
+                            class="w-full">
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="form-field">
+                        <label for="typeFilter" class="form-label">Filter by Type</label>
+                        <p-dropdown
+                            id="typeFilter"
+                            [(ngModel)]="filters.type"
+                            [options]="workflowTypes"
+                            optionLabel="label"
+                            optionValue="value"
+                            placeholder="All Types"
+                            styleClass="w-full"
+                            [showClear]="true">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="form-field">
+                        <label for="userFilter" class="form-label">Filter by User</label>
+                        <p-dropdown
+                            id="userFilter"
+                            [(ngModel)]="filters.assignedUserId"
+                            [options]="users"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="All Users"
+                            styleClass="w-full"
+                            [showClear]="true">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-12 md:col-2">
+                    <div class="form-field">
+                        <label class="form-label">&nbsp;</label>
+                        <div class="flex gap-2">
+                            <p-button
+                                label="Apply"
+                                icon="pi pi-search"
+                                styleClass="p-button-primary"
+                                (onClick)="applyFilters()">
+                            </p-button>
+                            <p-button
+                                label="Clear"
+                                icon="pi pi-times"
+                                styleClass="p-button-secondary"
+                                (onClick)="clearFilters()">
+                            </p-button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Workflows Table -->
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Workflows</h5>
+                    <small class="text-muted ml-2">Manage all system workflows</small>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                [value]="workflows"
+                [paginator]="true"
+                [rows]="10"
+                [totalRecords]="workflows.length"
+                [loading]="loading"
+                [rowHover]="true"
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true"
+                responsiveLayout="scroll">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="name" style="min-width:20rem">
+                            Workflow Name <p-sortIcon field="name"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="type" style="min-width:15rem">
+                            Type <p-sortIcon field="type"></p-sortIcon>
+                        </th>
+                        <th style="min-width:18rem">Assigned User</th>
+                        <th pSortableColumn="isActive" style="min-width:12rem">
+                            Status <p-sortIcon field="isActive"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="updatedAt" style="min-width:15rem">
+                            Last Updated <p-sortIcon field="updatedAt"></p-sortIcon>
+                        </th>
+                        <th style="min-width:18rem">Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-workflow>
+                    <tr>
+                        <td>
+                            <div class="workflow-name">
+                                <div class="font-medium">{{workflow.name}}</div>
+                                <small class="text-muted" *ngIf="workflow.description">
+                                    {{workflow.description}}
+                                </small>
+                            </div>
+                        </td>
+                        <td>
+                            <p-tag
+                                [value]="getWorkflowTypeLabel(workflow.type)"
+                                [style]="{'background-color': getWorkflowTypeColor(workflow.type)}">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <div class="font-medium">{{getUserName(workflow.assignedUserId)}}</div>
+                                <small class="text-muted">{{workflow.assignedUser?.email}}</small>
+                            </div>
+                        </td>
+                        <td>
+                            <p-tag
+                                [value]="workflow.isActive ? 'Active' : 'Inactive'"
+                                [severity]="workflow.isActive ? 'success' : 'danger'">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="date-info">
+                                <div>{{workflow.updatedAt | date:'short'}}</div>
+                                <small class="text-muted">by {{workflow.updatedBy}}</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    styleClass="p-button-rounded p-button-info mr-2"
+                                    pTooltip="Edit Workflow"
+                                    tooltipPosition="top"
+                                    (onClick)="editWorkflow(workflow)">
+                                </p-button>
+
+                                <p-button
+                                    icon="pi pi-power-off"
+                                    styleClass="p-button-rounded mr-2"
+                                    [styleClass]="workflow.isActive ? 'p-button-warning' : 'p-button-success'"
+                                    [pTooltip]="workflow.isActive ? 'Deactivate' : 'Activate'"
+                                    tooltipPosition="top"
+                                    (onClick)="toggleWorkflowStatus(workflow)">
+                                </p-button>
+
+                                <p-button
+                                    icon="pi pi-trash"
+                                    styleClass="p-button-rounded p-button-danger"
+                                    pTooltip="Delete Workflow"
+                                    tooltipPosition="top"
+                                    (onClick)="deleteWorkflow(workflow)">
+                                </p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <div class="empty-state">
+                                <i class="pi pi-sitemap empty-icon"></i>
+                                <h4>No workflows found</h4>
+                                <p>No workflows have been created yet.</p>
+                                <p-button
+                                    label="Create First Workflow"
+                                    icon="pi pi-plus"
+                                    styleClass="p-button-primary"
+                                    (onClick)="toggleAddForm()">
+                                </p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
 
 

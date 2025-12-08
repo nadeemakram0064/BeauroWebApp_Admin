@@ -1,10 +1,384 @@
-<div class="grid">
-    <div class="col-12">
-        <div class="card">
-            <h5>Global Settings</h5>
-            <p>Global Settings component content goes here.</p>
+<!-- Statistics Cards -->
+<div class="grid" *ngIf="!showAddForm">
+    <div class="col-12 md:col-3">
+        <div class="card stats-card">
+            <div class="stats-icon">
+                <i class="pi pi-cog"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{settings.length}}</h3>
+                <span>Total Settings</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card">
+            <div class="stats-icon active">
+                <i class="pi pi-check-circle"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getActiveSettingsCount()}}</h3>
+                <span>Active Settings</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card">
+            <div class="stats-icon system">
+                <i class="pi pi-shield"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getSystemSettingsCount()}}</h3>
+                <span>System Settings</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="card stats-card">
+            <div class="stats-icon custom">
+                <i class="pi pi-user"></i>
+            </div>
+            <div class="stats-content">
+                <h3>{{getCustomSettingsCount()}}</h3>
+                <span>Custom Settings</span>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Main Content -->
+<div class="grid">
+    <div class="col-12">
+        <!-- Header with Add Button -->
+        <div class="card">
+            <p-toolbar styleClass="mb-0">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Global Configuration Settings</h5>
+                    <small class="text-muted ml-2">Manage application-wide configuration variables</small>
+                </ng-template>
 
+                <ng-template pTemplate="right">
+                    <p-button
+                        label="Add New Setting"
+                        icon="pi pi-plus"
+                        styleClass="p-button-primary"
+                        (onClick)="toggleAddForm()"
+                        [disabled]="showAddForm">
+                    </p-button>
+                </ng-template>
+            </p-toolbar>
+        </div>
+
+        <!-- Add/Edit Form -->
+        <div class="card" *ngIf="showAddForm">
+            <h5>{{editingSetting ? 'Edit Setting' : 'Add New Configuration Setting'}}</h5>
+
+            <form [formGroup]="settingForm" (ngSubmit)="editingSetting ? updateSetting() : onSubmit()">
+                <div class="grid">
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label for="variableName" class="form-label">Variable Name *</label>
+                            <input
+                                id="variableName"
+                                type="text"
+                                pInputText
+                                formControlName="variableName"
+                                placeholder="e.g., MAX_FILE_SIZE"
+                                [class.ng-invalid]="settingForm.get('variableName')?.invalid && settingForm.get('variableName')?.touched"
+                                [readonly]="!!editingSetting">
+
+                            <small class="form-help">Use uppercase letters, numbers, and underscores only. Must start with a letter.</small>
+
+                            <small class="p-error" *ngIf="settingForm.get('variableName')?.invalid && settingForm.get('variableName')?.touched">
+                                <span *ngIf="settingForm.get('variableName')?.errors?.['required']">Variable name is required</span>
+                                <span *ngIf="settingForm.get('variableName')?.errors?.['pattern']">Invalid format. Use only uppercase letters, numbers, and underscores. Must start with a letter.</span>
+                                <span *ngIf="settingForm.get('variableName')?.errors?.['variableNameExists']">This variable name already exists</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 md:col-6">
+                        <div class="form-field">
+                            <label for="dataType" class="form-label">Data Type *</label>
+                            <p-dropdown
+                                id="dataType"
+                                formControlName="dataType"
+                                [options]="dataTypes"
+                                optionLabel="label"
+                                optionValue="value"
+                                placeholder="Select data type"
+                                styleClass="w-full"
+                                [class.ng-invalid]="settingForm.get('dataType')?.invalid && settingForm.get('dataType')?.touched"
+                                [disabled]="!!editingSetting">
+
+                                <ng-template let-option pTemplate="item">
+                                    <div class="flex align-items-center">
+                                        <span class="font-medium">{{option.label}}</span>
+                                        <small class="text-muted ml-2">{{option.description}}</small>
+                                    </div>
+                                </ng-template>
+                            </p-dropdown>
+
+                            <small class="p-error" *ngIf="settingForm.get('dataType')?.invalid && settingForm.get('dataType')?.touched">
+                                Data type is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12" *ngIf="selectedDataType">
+                        <div class="form-field">
+                            <label for="value" class="form-label">Value *</label>
+
+                            <!-- String Input -->
+                            <input
+                                *ngIf="inputType === 'text' && !isTextArea"
+                                id="value"
+                                type="text"
+                                pInputText
+                                formControlName="value"
+                                [placeholder]="placeholder"
+                                class="w-full"
+                                [class.ng-invalid]="settingForm.get('value')?.invalid && settingForm.get('value')?.touched">
+
+                            <!-- Number Input -->
+                            <input
+                                *ngIf="inputType === 'number'"
+                                id="value"
+                                type="number"
+                                pInputText
+                                formControlName="value"
+                                [placeholder]="placeholder"
+                                class="w-full"
+                                [class.ng-invalid]="settingForm.get('value')?.invalid && settingForm.get('value')?.touched">
+
+                            <!-- Date Input -->
+                            <input
+                                *ngIf="inputType === 'date'"
+                                id="value"
+                                type="date"
+                                pInputText
+                                formControlName="value"
+                                class="w-full"
+                                [class.ng-invalid]="settingForm.get('value')?.invalid && settingForm.get('value')?.touched">
+
+                            <!-- Boolean Checkbox -->
+                            <div *ngIf="selectedDataType === 'boolean'" class="boolean-input">
+                                <p-checkbox
+                                    formControlName="value"
+                                    inputId="value"
+                                    label="Enable/True">
+                                </p-checkbox>
+                            </div>
+
+                            <!-- Textarea for JSON/Array -->
+                            <textarea
+                                *ngIf="isTextArea"
+                                id="value"
+                                pInputTextarea
+                                formControlName="value"
+                                [placeholder]="placeholder"
+                                rows="4"
+                                class="w-full"
+                                [class.ng-invalid]="settingForm.get('value')?.invalid && settingForm.get('value')?.touched">
+                            </textarea>
+
+                            <small class="form-help">{{helpText}}</small>
+
+                            <small class="p-error" *ngIf="settingForm.get('value')?.invalid && settingForm.get('value')?.touched">
+                                <span *ngIf="settingForm.get('value')?.errors?.['required']">Value is required</span>
+                                <span *ngIf="settingForm.get('value')?.errors?.['pattern']">Invalid number format</span>
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-field">
+                            <label for="description" class="form-label">Description (Optional)</label>
+                            <input
+                                id="description"
+                                type="text"
+                                pInputText
+                                formControlName="description"
+                                placeholder="Describe what this setting does..."
+                                class="w-full">
+                            <small class="form-help">Provide a clear description of this configuration setting</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <p-button
+                        type="button"
+                        label="Cancel"
+                        icon="pi pi-times"
+                        styleClass="p-button-secondary mr-2"
+                        (onClick)="cancelEdit()">
+                    </p-button>
+
+                    <p-button
+                        type="submit"
+                        [label]="editingSetting ? 'Update Setting' : 'Create Setting'"
+                        icon="pi pi-check"
+                        styleClass="p-button-primary"
+                        [loading]="isSubmitting"
+                        [disabled]="settingForm.invalid">
+                    </p-button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Settings Table -->
+        <div class="card">
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <h5 class="m-0">Current Settings</h5>
+                    <small class="text-muted ml-2">All application configuration variables</small>
+                </ng-template>
+            </p-toolbar>
+
+            <p-table
+                #dt
+                [value]="settings"
+                [paginator]="true"
+                [rows]="10"
+                [totalRecords]="settings.length"
+                [loading]="loading"
+                [rowHover]="true"
+                dataKey="id"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                [showCurrentPageReport]="true"
+                responsiveLayout="scroll">
+
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="variableName" style="min-width:15rem">
+                            Variable Name <p-sortIcon field="variableName"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="dataType" style="min-width:12rem">
+                            Data Type <p-sortIcon field="dataType"></p-sortIcon>
+                        </th>
+                        <th style="min-width:20rem">Value</th>
+                        <th pSortableColumn="description" style="min-width:15rem">
+                            Description <p-sortIcon field="description"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="isActive" style="min-width:10rem">
+                            Status <p-sortIcon field="isActive"></p-sortIcon>
+                        </th>
+                        <th pSortableColumn="updatedAt" style="min-width:12rem">
+                            Last Updated <p-sortIcon field="updatedAt"></p-sortIcon>
+                        </th>
+                        <th style="min-width:15rem">Actions</th>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-setting>
+                    <tr>
+                        <td>
+                            <div class="variable-name">
+                                <code>{{setting.variableName}}</code>
+                                <p-tag
+                                    *ngIf="setting.createdBy === 'system'"
+                                    value="System"
+                                    severity="info"
+                                    styleClass="ml-2">
+                                </p-tag>
+                            </div>
+                        </td>
+                        <td>
+                            <p-tag
+                                [value]="getDataTypeLabel(setting.dataType)"
+                                [style]="{'background-color': getDataTypeColor(setting.dataType)}">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="value-display">
+                                <span class="value-text">{{formatValueForDisplay(setting.value, setting.dataType)}}</span>
+                                <p-button
+                                    *ngIf="setting.dataType === 'json' || setting.dataType === 'array'"
+                                    icon="pi pi-eye"
+                                    styleClass="p-button-rounded p-button-text ml-2"
+                                    pTooltip="View full value"
+                                    tooltipPosition="top">
+                                </p-button>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="description-cell">
+                                <span *ngIf="setting.description; else noDescription">
+                                    {{setting.description}}
+                                </span>
+                                <ng-template #noDescription>
+                                    <span class="text-muted">No description</span>
+                                </ng-template>
+                            </div>
+                        </td>
+                        <td>
+                            <p-tag
+                                [value]="setting.isActive ? 'Active' : 'Inactive'"
+                                [severity]="setting.isActive ? 'success' : 'danger'">
+                            </p-tag>
+                        </td>
+                        <td>
+                            <div class="date-info">
+                                <div>{{setting.updatedAt | date:'short'}}</div>
+                                <small class="text-muted">by {{setting.updatedBy}}</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <p-button
+                                    icon="pi pi-pencil"
+                                    styleClass="p-button-rounded p-button-info mr-2"
+                                    pTooltip="Edit Setting"
+                                    tooltipPosition="top"
+                                    (onClick)="editSetting(setting)">
+                                </p-button>
+
+                                <p-button
+                                    *ngIf="setting.createdBy !== 'system'"
+                                    icon="pi pi-power-off"
+                                    styleClass="p-button-rounded mr-2"
+                                    [styleClass]="setting.isActive ? 'p-button-warning' : 'p-button-success'"
+                                    [pTooltip]="setting.isActive ? 'Deactivate' : 'Activate'"
+                                    tooltipPosition="top"
+                                    (onClick)="toggleSettingStatus(setting)">
+                                </p-button>
+
+                                <p-button
+                                    *ngIf="setting.createdBy !== 'system'"
+                                    icon="pi pi-trash"
+                                    styleClass="p-button-rounded p-button-danger"
+                                    pTooltip="Delete Setting"
+                                    tooltipPosition="top"
+                                    (onClick)="deleteSetting(setting)">
+                                </p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7" class="text-center py-4">
+                            <div class="empty-state">
+                                <i class="pi pi-cog empty-icon"></i>
+                                <h4>No settings found</h4>
+                                <p>No configuration settings have been created yet.</p>
+                                <p-button
+                                    label="Add First Setting"
+                                    icon="pi pi-plus"
+                                    styleClass="p-button-primary"
+                                    (onClick)="toggleAddForm()">
+                                </p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+<p-toast></p-toast>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>

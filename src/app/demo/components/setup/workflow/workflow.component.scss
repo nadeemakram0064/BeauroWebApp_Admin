@@ -1,3 +1,292 @@
 // Workflow component styles
 
+// Statistics Cards
+.stats-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .stats-icon {
+        position: absolute;
+        top: -20px;
+        right: -20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        opacity: 0.9;
+
+        &.active {
+            background: rgba(40, 167, 69, 0.2);
+        }
+
+        &.approval {
+            background: rgba(0, 123, 255, 0.2);
+        }
+
+        &.automated {
+            background: rgba(111, 66, 193, 0.2);
+        }
+    }
+
+    .stats-content {
+        padding: 1.5rem;
+
+        h3 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 0 0 0.5rem 0;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        span {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+    }
+}
+
+// Form Styles
+.form-field {
+    margin-bottom: 1.5rem;
+
+    .form-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        color: #374151;
+        font-size: 0.875rem;
+    }
+
+    .form-help {
+        display: block;
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: #6b7280;
+    }
+
+    .p-error {
+        color: #dc2626;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+}
+
+.status-toggle {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background: #f9fafb;
+
+    .status-label {
+        font-weight: 500;
+        color: #374151;
+        margin: 0;
+    }
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+// User Info Styles
+.user-info {
+    .font-medium {
+        font-weight: 500;
+        color: #111827;
+    }
+
+    small {
+        display: block;
+        color: #6b7280;
+        margin-top: 0.125rem;
+    }
+}
+
+// Workflow Name Styles
+.workflow-name {
+    .font-medium {
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 0.25rem;
+    }
+
+    small {
+        color: #6b7280;
+        display: block;
+    }
+}
+
+// Date Info Styles
+.date-info {
+    div {
+        font-weight: 500;
+        color: #111827;
+        margin-bottom: 0.125rem;
+    }
+
+    small {
+        color: #6b7280;
+    }
+}
+
+// Action Buttons
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+}
+
+// Empty State
+.empty-state {
+    text-align: center;
+    padding: 2rem;
+
+    .empty-icon {
+        font-size: 3rem;
+        color: #d1d5db;
+        margin-bottom: 1rem;
+    }
+
+    h4 {
+        color: #374151;
+        margin: 0 0 0.5rem 0;
+        font-size: 1.125rem;
+        font-weight: 600;
+    }
+
+    p {
+        color: #6b7280;
+        margin: 0 0 1.5rem 0;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .stats-card {
+        margin-bottom: 1rem;
+
+        .stats-content {
+            padding: 1rem;
+
+            h3 {
+                font-size: 2rem;
+            }
+        }
+    }
+
+    .form-actions {
+        flex-direction: column;
+
+        .p-button {
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+    }
+
+    .action-buttons {
+        flex-direction: column;
+
+        .p-button {
+            width: 100%;
+            margin-bottom: 0.25rem;
+        }
+    }
+}
+
+// Table Customizations
+.p-datatable {
+    .p-datatable-tbody > tr > td {
+        padding: 0.75rem;
+    }
+}
+
+// Tag Customizations
+.p-tag {
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.25rem 0.5rem;
+}
+
+// Button Customizations
+.p-button {
+    border-radius: 6px;
+    font-weight: 500;
+
+    &.p-button-rounded {
+        border-radius: 50%;
+        width: 2.5rem;
+        height: 2.5rem;
+    }
+}
+
+// Dropdown Customizations
+.p-dropdown {
+    .p-dropdown-label {
+        padding: 0.5rem 0.75rem;
+    }
+}
+
+// Input Customizations
+.p-inputtext,
+.p-inputtextarea {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+
+    &:focus {
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    &.ng-invalid.ng-touched {
+        border-color: #dc2626;
+    }
+}
+
+// Card Customizations
+.card {
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+}
+
+// Toolbar Customizations
+.p-toolbar {
+    border-bottom: 1px solid #e5e7eb;
+    background: #f9fafb;
+    border-radius: 8px 8px 0 0;
+}
+
+// Toast Customizations
+.p-toast {
+    .p-toast-message {
+        border-radius: 8px;
+    }
+}
+
+// Confirm Dialog Customizations
+.p-confirm-dialog {
+    .p-dialog {
+        border-radius: 8px;
+    }
+}
