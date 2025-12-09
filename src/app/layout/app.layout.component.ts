@@ -15,8 +15,6 @@ export class AppLayoutComponent implements OnDestroy {
 
     menuOutsideClickListener: any;
 
-    profileMenuOutsideClickListener: any;
-
     @ViewChild(AppSidebarComponent) appSidebar!: AppSidebarComponent;
 
     @ViewChild(AppTopBarComponent) appTopbar!: AppTopBarComponent;
@@ -34,16 +32,6 @@ export class AppLayoutComponent implements OnDestroy {
                 });
             }
 
-            if (!this.profileMenuOutsideClickListener) {
-                this.profileMenuOutsideClickListener = this.renderer.listen('document', 'click', event => {
-                    const isOutsideClicked = !(this.appTopbar.menu.nativeElement.isSameNode(event.target) || this.appTopbar.menu.nativeElement.contains(event.target)
-                        || this.appTopbar.topbarMenuButton.nativeElement.isSameNode(event.target) || this.appTopbar.topbarMenuButton.nativeElement.contains(event.target));
-
-                    if (isOutsideClicked) {
-                        this.hideProfileMenu();
-                    }
-                });
-            }
 
             if (this.layoutService.state.staticMenuMobileActive) {
                 this.blockBodyScroll();
@@ -53,7 +41,6 @@ export class AppLayoutComponent implements OnDestroy {
         this.router.events.pipe(filter(event => event instanceof NavigationEnd))
             .subscribe(() => {
                 this.hideMenu();
-                this.hideProfileMenu();
             });
     }
 
@@ -68,13 +55,6 @@ export class AppLayoutComponent implements OnDestroy {
         this.unblockBodyScroll();
     }
 
-    hideProfileMenu() {
-        this.layoutService.state.profileSidebarVisible = false;
-        if (this.profileMenuOutsideClickListener) {
-            this.profileMenuOutsideClickListener();
-            this.profileMenuOutsideClickListener = null;
-        }
-    }
 
     blockBodyScroll(): void {
         if (document.body.classList) {
