@@ -14,3 +14,22 @@ $gutter: 1rem; //for primeflex grid system
 /* Demos */
 @import "assets/demo/styles/flags/flags.css";
 @import "assets/demo/styles/badges.scss";
+
+/* Theme Overrides */
+:root {
+    --surface-ground: #fff5f7;
+    /* Very light pink background */
+    --surface-section: #fff5f7;
+    --surface-card: #ffffff;
+    --surface-overlay: #ffffff;
+}
+
+/* Ensure background of layout components is light pink */
+.layout-topbar,
+.layout-sidebar {
+    background-color: #fff5f7 !important;
+}
+
+body {
+    background-color: var(--surface-ground) !important;
+}
